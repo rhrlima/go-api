@@ -51,8 +51,12 @@ jobs:
         with: 
           tag: ${{ vars.APP_VERSION }}
 
+      - name: Checkout repository
+        if: ${{ steps.check.outputs.exists == 'false' }}
+        uses: actions/checkout@v4
+
       - name: Create Tag
-        if: ${{ steps.check.outputs.exists }} == 'false'
+        if: ${{ steps.check.outputs.exists == 'false' }}
         run: |
           git tag ${{ vars.APP_VERSION }}
           git push --tags
