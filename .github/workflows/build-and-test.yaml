@@ -78,6 +78,5 @@ jobs:
     steps:
       - uses: rhrlima/ci-actions/actions/docker-build@main
         with:
-          IMAGE_NAME: "${{ vars.IMAGE_NAME }}"
           IMAGE_TAG: "${{ vars.APP_VERSION }}"
           DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # default token
