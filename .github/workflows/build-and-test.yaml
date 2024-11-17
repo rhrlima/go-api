@@ -1,0 +1,54 @@
+# Builds and tests the application.
+# Runs on PRs that are opened, synchronized, or reopened, with light tests.
+# On pushes to the main branch, it runs all tests (light and heavy). 
+
+name: Build & Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_and_test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Build the app
+        run: go build -o main .
+
+      - name: Light Tests
+        run: go test ./... -v
+
+  create_tag:
+    name: Create Tag
+    runs-on: ubuntu-latest
+
+    # only MAIN branch
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get Version
+        run: echo "Using version ${{ vars.APP_VERSION }}"
+
+      - name: Create Tag
+        run: |
+          git tag ${{ vars.APP_VERSION }}
+          git push --tags
