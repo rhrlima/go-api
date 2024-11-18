@@ -12,11 +12,8 @@ jobs:
     name: Bump Version
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     steps:
       - name: Bump Version
         uses: rhrlima/ci-actions/actions/bump-version@main
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
