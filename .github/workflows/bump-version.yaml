@@ -1,0 +1,16 @@
+name: Update Version
+
+on:
+  pull_request:
+    types:
+      - opened
+      - labeled
+      - unlabeled
+
+jobs:
+  bump-version:
+    name: Bump Version
+    runs-on: ubuntu-latest
+
+    steps:
+        uses: rhrlima/ci-actions/actions/bump-version@main
