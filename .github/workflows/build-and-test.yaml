@@ -10,8 +10,6 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-  # test
-  workflow_dispatch:
 
 jobs:
   build_and_test:
@@ -44,24 +42,10 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Get Version
-        run: echo "Using version ${{ vars.APP_VERSION }}"
-
-      - name: Check Tag
-        uses: action-pack/tag-exists@v1
-        id: check
-        with: 
-          tag: ${{ vars.APP_VERSION }}
-
-      - name: Checkout repository
-        if: ${{ steps.check.outputs.exists == 'false' }}
-        uses: actions/checkout@v4
-
       - name: Create Tag
-        if: ${{ steps.check.outputs.exists == 'false' }}
-        run: |
-          git tag ${{ vars.APP_VERSION }}
-          git push --tags
+        uses: rhrlima/ci-actions/actions/create-tag@main
+        with:
+          TAG: ${{ vars.APP_VERSION }}
 
   docker_build_and_publish:
     name: Docker Build & Publish
@@ -70,10 +54,6 @@ jobs:
 
     # only MAIN branch
     if: github.ref == 'refs/heads/main'
-
-    # permissions:
-    #   contents: write
-    #   packages: write
 
     steps:
       - uses: rhrlima/ci-actions/actions/docker-build@main
