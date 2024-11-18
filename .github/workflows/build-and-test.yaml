@@ -12,6 +12,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
+  # customized per repository
   build_and_test:
     name: Build & Test
     runs-on: ubuntu-latest

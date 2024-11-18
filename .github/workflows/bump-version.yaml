@@ -1,0 +1,19 @@
+name: Update Version
+
+on:
+  pull_request:
+    types:
+      - opened
+      - labeled
+      - unlabeled
+
+jobs:
+  bump-version:
+    name: Bump Version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Bump Version
+        uses: rhrlima/ci-actions/actions/bump-version@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
