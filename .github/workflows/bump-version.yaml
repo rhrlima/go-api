@@ -13,4 +13,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Bump Version
         uses: rhrlima/ci-actions/actions/bump-version@main
