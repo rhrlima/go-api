@@ -1,0 +1,34 @@
+# Updates the release draft with the latest changes.
+# A new item will be added to the draft for each PR merged since the last release.
+# Categories are decided based on PR labels: (template in .github/release-drafter.yml)
+# - feature
+# - bugfix
+# - chore
+# The draft is published by running the Deploy action.
+
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    permissions:
+      # write permission is required to create a github release
+      contents: write
+      # write permission is required for autolabeler
+      # otherwise, read permission is required at least
+      pull-requests: read
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        # (Optional) specify config name to use, relative to .github/. 
+        # Default: release-drafter.yml
+        with:
+          name: Release Candidate
+          disable-autolabeler: true
+        env:
+          # token must have at least "repo" scope
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
