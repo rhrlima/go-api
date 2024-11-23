@@ -1,0 +1,43 @@
+name: Deploy
+
+on: [workflow_dispatch]
+
+jobs:
+  publish_release_draft:
+    name: Publish Release Draft
+    runs-on: ubuntu-latest
+
+    permissions:
+      # write permission is required to create a github release
+      contents: write
+      # write permission is required for autolabeler
+      # otherwise, read permission is required at least
+      pull-requests: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: release-drafter/release-drafter@v6
+        with:
+          name: Release ${{ vars.APP_VERSION }}
+          tag: ${{ vars.APP_VERSION }}
+          publish: true
+          disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+  deploy_dev:
+    name: Deploy Dev
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - name: Repository Dispatch
+        uses: rhrlima/ci-actions/actions/deploy-send@main
+        with:
+          IMAGE_TAG: ${{ vars.APP_VERSION }}
+          REPO_NAME: ${{ vars.DEPLOY_REPO }}
+          MANIFEST_PATH: "dev/${{ vars.DEPLOY_MANIFEST }}"
+          EVENT_TYPE: "[DEV] Deploy GO-API"
+          TOKEN: ${{ secrets.PAT_TOKEN }}
