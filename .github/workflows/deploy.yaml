@@ -40,4 +40,4 @@ jobs:
           REPO_NAME: ${{ vars.DEPLOY_REPO }}
           MANIFEST_PATH: "dev/${{ vars.DEPLOY_MANIFEST }}"
           EVENT_TYPE: "[DEV] Deploy GO-API"
-          TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
